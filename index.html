@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StateVector DB - 量子向量数据库</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #34495e;
+            --background-color: #f8f9fa;
+            --code-background: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.3em;
+        }
+
+        .architecture-diagram {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        code {
+            background: var(--code-background);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        pre {
+            background: var(--code-background);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .directory-structure {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .module-relation {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .warning {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>StateVector DB
+         - 量子向量数据库</h1>
+
+    <h2>项目概述</h2>
+    <p>StateVector Database）是一个基于量子计算原理的向量数据库系统，专为高效处理和检索多模态数据而设计。该系统利用量子哈希微小指针技术构建索引，并通过量子Grover算法实现高效查询。</p>
+
+    <h2>核心特性</h2>
+    <ul class="feature-list">
+        <li class="feature-item">多模态数据支持：处理文档、图片、视频、音频等多种数据类型</li>
+        <li class="feature-item">量子哈希索引：使用PTHash量子哈希函数生成微小指针</li>
+        <li class="feature-item">通用量子哈希适配层：支持多种量子计算平台的UQHash接口</li>
+        <li class="feature-item">高效向量存储：优化的向量数据存储结构</li>
+        <li class="feature-item">量子搜索算法：基于Grover算法的高效查询机制</li>
+        <li class="feature-item">元数据管理：完善的元数据索引系统</li>
+        <li class="feature-item">性能统计：详细的系统性能监控</li>
+        <li class="feature-item">索引更新日志：可靠的索引变更记录</li>
+    </ul>
+
+    <h2>系统架构</h2>
+    <div class="architecture-diagram">
+        +-------------+      +-------------+      +-------------------+      +-------------------------+
+        |   UQHash    |----->|   PTHash    |----->| StateVector_storage |----->| Quan_Tiny-pointer_Hash_index |
+        +-------------+      +-------------+      +-------------------+      +-------------------------+
+                                     |                      |                             |
+                                     |                      |                             |
+                                     v                      v                             v
+                               +-------------+      +-------------------+      +-------------------------+
+                               |   Grover    |<---->| metadata_index    |<---->|      statistics         |
+                               +-------------+      +-------------------+      +-------------------------+
+                                                                |
+                                                                |
+                                                                v
+                                                        +-------------------+
+                                                        | index_update_log  |
+                                                        +-------------------+
+    </div>
+
+    <h2>目录结构</h2>
+    <div class="directory-structure">
+        StateVector/
+        ├── README.md                 # 项目说明文档
+        ├── __init__.py               # 包初始化文件
+        ├── config.py                 # 配置文件
+        ├── requirements.txt          # 依赖包列表
+        ├── UQHash/                   # 通用量子哈希适配层
+        │   ├── __init__.py
+        │   ├── UQHash.py             # UQHash核心实现
+        │   ├── uqhash_config.json    # UQHash配置文件
+        │   └── uqhash_adapters.py    # 自定义适配器示例
+        ...
+    </div>
+
+    <h2>安装与使用</h2>
+    <div class="warning">
+        <strong>注意：</strong>使用前请确保已安装Python 3.8+版本
+    </div>
+
+    <h3>安装依赖</h3>
+    <pre><code>pip install -r requirements.txt</code></pre>
+
+    <h3>基本使用</h3>
+    <pre><code>from SVDB import SVDB
+
+# 初始化数据库
+db = SVDB(db_path="path/to/database")
+
+# 存储文档
+doc_id = db.store_document("path/to/document.pdf")
+
+# 查询
+results = db.search("查询内容", top_k=5)</code></pre>
+
+    <h2>许可证</h2>
+    <p>本项目采用 <a href="LICENSE" class="button">MIT License</a></p>
+
+    <div style="text-align: center; margin-top: 40px; color: #666;">
+        © 2023 SVDB Project | 欢迎贡献代码和反馈建议
+    </div>
+</body>
+</html>

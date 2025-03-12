@@ -1,0 +1,25 @@
+# SVDB - 量子向量数据库依赖包
+
+# 核心依赖
+numpy>=1.20.0
+pyquafu>=0.3.0
+sqlite3>=2.6.0
+psutil>=5.9.0
+
+# 向量处理
+scipy>=1.7.0
+scikit-learn>=1.0.0
+sentence-transformers>=2.2.0
+
+# 文档处理
+PyPDF2>=2.0.0
+pillow>=9.0.0
+librosa>=0.9.0
+opencv-python>=4.5.0
+
+# 数据处理
+pandas>=1.3.0
+json5>=0.9.0
+
+# 量子计算
+# 注意：如果PyQuafu不可用，系统将回退到经典模拟模式

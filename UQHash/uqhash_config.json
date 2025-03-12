@@ -1,0 +1,19 @@
+{
+    "backend": "quafu",
+    "backend_options": {
+        "quafu": {},
+        "qiskit": {
+            "backend_type": "aer_simulator"
+        },
+        "paddle": {},
+        "custom": {
+            "module": "uqhash_adapters",
+            "adapter_class": "CustomAdapter",
+            "init_params": {}
+        }
+    },
+    "fallback_mode": "deterministic",
+    "hash_size": 256,
+    "precision": 18,
+    "vector_size": 32
+}
