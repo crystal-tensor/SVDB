@@ -2,4 +2,4 @@
 
 __all__ = ['VectorStore']
 
-from SVDB.StateVector_storage.vector_store import VectorStore
+from .vector_store import VectorStore

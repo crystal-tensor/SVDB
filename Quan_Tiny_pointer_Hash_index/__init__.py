@@ -2,5 +2,5 @@
 
 __all__ = ['HashIndexBuilder', 'HashBucket']
 
-from SVDB.Quan_Tiny_pointer_Hash_index.index_builder import HashIndexBuilder
-from SVDB.Quan_Tiny_pointer_Hash_index.hash_bucket import HashBucket
+from .index_builder import HashIndexBuilder
+from .hash_bucket import HashBucket

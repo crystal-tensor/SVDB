@@ -2,4 +2,4 @@
 
 __all__ = ['PTHash']
 
-from SVDB.PTHash.pthash import PTHash
+from .pthash import PTHash

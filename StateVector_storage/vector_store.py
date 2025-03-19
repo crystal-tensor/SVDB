@@ -30,7 +30,7 @@ class VectorStore:
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
         
         # 初始化数据库
-        from SVDB.StateVector_storage.init_db import init_database
+        from .init_db import init_database
         init_database(db_path, clear_existing)
         
         # 连接到数据库，确保有写入权限

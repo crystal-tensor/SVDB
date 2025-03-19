@@ -3,7 +3,7 @@
 import numpy as np
 import time
 import hashlib
-from SVDB.Quan_Tiny_pointer_Hash_index.hash_bucket import HashBucket
+from .hash_bucket import HashBucket
 
 class HashIndexBuilder:
     """
@@ -13,7 +13,7 @@ class HashIndexBuilder:
     通过哈希桶组织相似的向量，实现快速的近似最近邻搜索。
     """
     
-    def __init__(self, hasher, bucket_size=100, dimension=32):
+    def __init__(self, hasher, bucket_size=100, dimension=32, log_manager=None):
         """
         初始化哈希索引构建器
         
@@ -21,6 +21,7 @@ class HashIndexBuilder:
             hasher: PTHash实例，用于生成量子哈希
             bucket_size: 每个哈希桶的最大容量
             dimension: 指针向量的维度
+            log_manager: 日志管理器实例，用于记录索引更新
         """
         self.hasher = hasher
         self.bucket_size = bucket_size
@@ -28,14 +29,16 @@ class HashIndexBuilder:
         self.buckets = {}  # 桶ID到哈希桶的映射
         self.item_to_bucket = {}  # 项目ID到桶ID的映射
         self.last_update = time.time()
+        self.log_manager = log_manager
     
-    def build_index(self, item_id, pointers):
+    def build_index(self, item_id, pointers, operation_id=None):
         """
         为项目构建索引
         
         Args:
             item_id: 项目ID
             pointers: 量子哈希微小指针列表
+            operation_id: 操作ID，用于日志记录
             
         Returns:
             success: 布尔值，表示构建是否成功
@@ -46,7 +49,7 @@ class HashIndexBuilder:
         
         # 如果项目已存在，先移除旧索引
         if item_id in self.item_to_bucket:
-            self.remove_index(item_id)
+            self.remove_index(item_id, operation_id)
         
         # 为每个指针分配哈希桶
         for i, pointer in enumerate(pointers):
@@ -66,18 +69,38 @@ class HashIndexBuilder:
                 if item_id not in self.item_to_bucket:
                     self.item_to_bucket[item_id] = []
                 self.item_to_bucket[item_id].append((bucket_id, sub_item_id))
+                
+                # 记录索引更新日志
+                if self.log_manager is not None:
+                    # 如果没有提供操作ID，创建一个新的
+                    if operation_id is None:
+                        operation_id = self.log_manager.start_operation("build_index")
+                    
+                    # 记录索引添加操作
+                    self.log_manager.log_index_update(
+                        operation_id=operation_id,
+                        item_id=item_id,
+                        action="add",
+                        bucket_id=str(bucket_id),
+                        details={"sub_item_id": sub_item_id, "pointer_dimension": self.dimension}
+                    )
         
         # 更新最后修改时间
         self.last_update = time.time()
         
+        # 如果是新创建的操作ID且日志管理器存在，记录操作完成
+        if self.log_manager is not None and operation_id is not None and operation_id.startswith("build_index"):
+            self.log_manager.end_operation(operation_id, status="success")
+        
         return True
     
-    def remove_index(self, item_id):
+    def remove_index(self, item_id, operation_id=None):
         """
         移除项目的索引
         
         Args:
             item_id: 项目ID
+            operation_id: 操作ID，用于日志记录
             
         Returns:
             success: 布尔值，表示移除是否成功
@@ -85,10 +108,24 @@ class HashIndexBuilder:
         if item_id not in self.item_to_bucket:
             return False
         
+        # 如果日志管理器存在且没有提供操作ID，创建一个新的
+        if self.log_manager is not None and operation_id is None:
+            operation_id = self.log_manager.start_operation("remove_index")
+        
         # 从所有相关桶中移除项目
         for bucket_id, sub_item_id in self.item_to_bucket[item_id]:
             if bucket_id in self.buckets:
                 self.buckets[bucket_id].remove_item(sub_item_id)
+                
+                # 如果日志管理器存在，记录索引移除操作
+                if self.log_manager is not None:
+                    self.log_manager.log_index_update(
+                        operation_id=operation_id,
+                        item_id=item_id,
+                        action="remove",
+                        bucket_id=str(bucket_id),
+                        details={"sub_item_id": sub_item_id}
+                    )
                 
                 # 如果桶为空，删除桶
                 if self.buckets[bucket_id].get_item_count() == 0:
@@ -99,6 +136,10 @@ class HashIndexBuilder:
         
         # 更新最后修改时间
         self.last_update = time.time()
+        
+        # 如果是新创建的操作ID且日志管理器存在，记录操作完成
+        if self.log_manager is not None and operation_id is not None and operation_id.startswith("remove_index"):
+            self.log_manager.end_operation(operation_id, status="success")
         
         return True
     

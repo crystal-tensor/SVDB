@@ -2,13 +2,19 @@
 
 __version__ = '0.1.0'
 
-from SVDB.PTHash.pthash import PTHash
-from SVDB.StateVector_storage.vector_store import VectorStore
-from SVDB.Quan_Tiny_pointer_Hash_index.index_builder import HashIndexBuilder
-from SVDB.Grover.grover_search import GroverSearch
-from SVDB.metadata_index.metadata_store import MetadataStore
-from SVDB.statistics.performance_monitor import PerformanceMonitor
-from SVDB.index_update_log.log_manager import LogManager
+import sys
+import os
+
+# 添加父目录到Python路径
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from PTHash.pthash import PTHash
+from StateVector_storage.vector_store import VectorStore
+from Quan_Tiny_pointer_Hash_index.index_builder import HashIndexBuilder
+from Grover.grover_search import GroverSearch
+from metadata_index.metadata_store import MetadataStore
+from statistics.performance_monitor import PerformanceMonitor
+from index_update_log.log_manager import LogManager
 
 class SVDB:
     """量子向量数据库主类，整合所有模块功能"""
@@ -53,7 +59,7 @@ class SVDB:
         operation_id = self.log_manager.start_operation("store_document")
         
         # 处理文档
-        from SVDB.utils.data_processors.text_processor import process_document
+        from utils.data_processors.text_processor import process_document
         chunks, embeddings, pointers = process_document(doc_path, self.hasher, chunk_size, overlap)
         
         # 存储向量

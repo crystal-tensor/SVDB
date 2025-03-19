@@ -17,9 +17,10 @@ from SVDB.metadata_index.metadata_store import MetadataStore
 from SVDB.statistics.performance_monitor import PerformanceMonitor
 from SVDB.index_update_log.log_manager import LogManager
 
-# 设置数据库路径
-db_path = os.path.join(os.path.dirname(__file__), 'data', 'tiny_pointer_db')
-os.makedirs(os.path.dirname(db_path), exist_ok=True)
+# 设置数据库路径 - 使用新的StateVector_storageDB目录
+db_dir = os.path.join(os.path.dirname(__file__), 'StateVector_storageDB')
+os.makedirs(db_dir, exist_ok=True)
+db_path = os.path.join(db_dir, 'vector_db.sqlite')
 
 # 设置PDF文件路径
 pdf_path = os.path.join(os.path.dirname(__file__), 'Tiny Pointer.pdf')
@@ -65,10 +66,10 @@ def process_and_search():
     print("\n步骤1: 初始化SVDB组件")
     hasher = PTHash(num_qubits=8, depth=3)
     vector_store = VectorStore(db_path)
-    index_builder = HashIndexBuilder(hasher)
+    log_manager = LogManager(db_path)
+    index_builder = HashIndexBuilder(hasher, log_manager=log_manager)
     metadata_store = MetadataStore(db_path)
     performance_monitor = PerformanceMonitor()
-    log_manager = LogManager(db_path)
     
     # 启动性能监控
     performance_monitor.start_monitoring()

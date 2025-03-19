@@ -2,4 +2,4 @@
 
 __all__ = ['PerformanceMonitor']
 
-from SVDB.statistics.performance_monitor import PerformanceMonitor
+from .performance_monitor import PerformanceMonitor

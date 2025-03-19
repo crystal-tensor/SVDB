@@ -29,11 +29,11 @@ class SVDB:
         # 初始化各模块
         self.hasher = PTHash(num_qubits=num_qubits, depth=depth)
         self.vector_store = VectorStore(db_path, clear_existing=clear_existing)
-        self.index_builder = HashIndexBuilder(self.hasher)
+        self.log_manager = LogManager(db_path)
+        self.index_builder = HashIndexBuilder(self.hasher, log_manager=self.log_manager)
         self.grover_search = GroverSearch()
         self.metadata_store = MetadataStore(db_path, clear_existing=clear_existing)
         self.performance_monitor = PerformanceMonitor()
-        self.log_manager = LogManager(db_path)
         
         # 启动性能监控
         self.performance_monitor.start_monitoring()

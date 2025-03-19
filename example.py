@@ -10,17 +10,17 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # 导入SVDB模块
 from SVDB import SVDB
-from SVDB.PTHash.pthash import PTHash
-from SVDB.StateVector_storage.vector_store import VectorStore
-from SVDB.Quan_Tiny_pointer_Hash_index.index_builder import HashIndexBuilder
-from SVDB.statistics.performance_monitor import PerformanceMonitor
+from PTHash.pthash import PTHash
+from StateVector_storage.vector_store import VectorStore
+from Quan_Tiny_pointer_Hash_index.index_builder import HashIndexBuilder
+from statistics.performance_monitor import PerformanceMonitor
 
 # 设置数据库路径
 db_path = os.path.join(os.path.dirname(__file__), 'data', 'tiny_pointer_db')
 os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
 # 设置PDF文件路径
-pdf_path = os.path.join(os.path.dirname(__file__), '20241206-亚洲艺术品金融商学院-中国艺术品金融行业市场发展蓝皮书（2024）.pdf')
+pdf_path = os.path.join(os.path.dirname(__file__), 'data', '20241206-亚洲艺术品金融商学院-中国艺术品金融行业市场发展蓝皮书（2024）.pdf')
 
 def process_tiny_pointer_pdf():
     """处理Tiny Pointer.pdf文档并存储到SVDB"""
@@ -34,8 +34,13 @@ def process_tiny_pointer_pdf():
     
     # 查询示例
     print("\n步骤2: 使用Grover算法搜索'艺术品市场的价值发展：整体价 值规律以及发展趋势'")
+    # 先将查询文本转换为向量
+    from SVDB.utils.data_processors.text_processor import text_to_embedding
+    query_text = "艺术品市场的价值发展：整体价 值规律以及发展趋势"
+    query_vector = text_to_embedding(query_text)
+    
     results = db.search(
-        query="艺术品市场的价值发展：整体价 值规律以及发展趋势",
+        query=query_vector,  # 使用向量而非文本字符串
         top_k=5,
         use_quantum=True  # 使用量子Grover算法
     )

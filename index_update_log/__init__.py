@@ -2,4 +2,4 @@
 
 __all__ = ['LogManager']
 
-from SVDB.index_update_log.log_manager import LogManager
+from .log_manager import LogManager

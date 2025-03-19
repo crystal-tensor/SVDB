@@ -2,4 +2,4 @@
 
 __all__ = ['MetadataStore']
 
-from SVDB.metadata_index.metadata_store import MetadataStore
+from .metadata_store import MetadataStore

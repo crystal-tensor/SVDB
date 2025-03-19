@@ -2,4 +2,4 @@
 
 __all__ = ['GroverSearch']
 
-from SVDB.Grover.grover_search import GroverSearch
+from .grover_search import GroverSearch
