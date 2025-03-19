@@ -164,6 +164,11 @@ stats = db.get_statistics()
 # 查看索引更新日志
 logs = db.get_index_update_logs(start_time, end_time)
 ```
+## 示例
+example.py
+
+## 批量处理
+process_documents.py
 
 ## 贡献
 
