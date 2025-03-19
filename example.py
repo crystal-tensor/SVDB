@@ -35,7 +35,7 @@ def process_tiny_pointer_pdf():
     # 查询示例
     print("\n步骤2: 使用Grover算法搜索'艺术品市场的价值发展：整体价 值规律以及发展趋势'")
     # 先将查询文本转换为向量
-    from SVDB.utils.data_processors.text_processor import text_to_embedding
+    from utils.data_processors.text_processor import text_to_embedding
     query_text = "艺术品市场的价值发展：整体价 值规律以及发展趋势"
     query_vector = text_to_embedding(query_text)
     

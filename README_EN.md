@@ -122,7 +122,7 @@ SVDB/
 pip install svdb
 
 # Or install from GitHub source
-pip install git+https://github.com/username/SVDB.git
+pip install git+https://github.com/crystal-tensor/SVDB.git
 ```
 
 ### Installing Dependencies
@@ -165,6 +165,11 @@ stats = db.get_statistics()
 # View index update logs
 logs = db.get_index_update_logs(start_time, end_time)
 ```
+## example
+example.py
+
+## Batch processing
+process_documents.py
 
 ## Contribution
 

@@ -121,7 +121,7 @@ SVDB/
 pip install svdb
 
 # 或从GitHub源码安装
-pip install git+https://github.com/username/SVDB.git
+pip install git+https://github.com/crystal-tensor/SVDB.git
 ```
 
 ### 安装依赖
